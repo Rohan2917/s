@@ -50,6 +50,11 @@ if(handleMediaQueryChange(mediaQuery)) {
     
             lastTouchY = currentTouchY;
             isHeroSectionInView();
+            if(currentSlide===slides.length-1) {
+                // Scrolling down from the last slide
+                scrollToNextSection();
+                preventDefaultAndResetScrolling(event);
+            }
         }
     });
 
