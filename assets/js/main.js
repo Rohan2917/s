@@ -39,11 +39,13 @@ if(handleMediaQueryChange(mediaQuery)) {
                 prevSlide = currentSlide;
                 currentSlide--;
                 scrollToSlide();
+                preventDefaultAndResetScrolling(event);
             } else {
                 // Scrolling up
                 prevSlide = currentSlide;
                 currentSlide++;
                 scrollToSlide();
+                preventDefaultAndResetScrolling(event);
             }
     
             lastTouchY = currentTouchY;
