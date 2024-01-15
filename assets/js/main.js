@@ -106,10 +106,6 @@ function handleSlideScroll(event) {
     const heroSection=document.getElementById('hero-section');
     const heroRect=heroSection.getBoundingClientRect();
     if(heroRect.top===65) {
-
-
-
-
         if(allowScrolling&&isCompleteHeroSectionInViewMode) {
             if(event.deltaY<0&&currentSlide>0) {
                 // Scrolling up
@@ -149,23 +145,43 @@ function scrollToNextSection() {
         sectionToScroll.scrollIntoView({behavior: 'smooth'});
     }
 }
-let passiveSupported = false;
 
-try {
-  const options = Object.defineProperty({}, 'passive', {
-    get: function() {
-      passiveSupported = true;
+window.addEventListener('wheel',handleSlideScroll,{passive: false});
+function handleTouchScroll(event) {
+    isHeroSectionInView();
+    const heroSection = document.getElementById('hero-section');
+    const heroRect = heroSection.getBoundingClientRect();
+    if (heroRect.top === 65) {
+        if (allowScrolling && isCompleteHeroSectionInViewMode) {
+            const touchY = event.touches[0].clientY;
+            const deltaY = touchY - lastTouchY;
+            lastTouchY = touchY;
+
+            if (deltaY < 0 && currentSlide > 0) {
+                // Scrolling up
+                prevSlide = currentSlide;
+                currentSlide--;
+                scrollToSlide();
+                preventDefaultAndResetScrolling(event);
+            } else if (deltaY > 0 && currentSlide < slides.length - 1) {
+                // Scrolling down
+                prevSlide = currentSlide;
+                currentSlide++;
+                scrollToSlide();
+                preventDefaultAndResetScrolling(event);
+            } else if (deltaY > 0 && currentSlide === slides.length - 1) {
+                // Scrolling down from the last slide
+                scrollToNextSection();
+                preventDefaultAndResetScrolling(event);
+            }
+        }
     }
-  });
-
-  window.addEventListener('test', null, options);
-} catch (err) {
-  // Passive events not supported
 }
-
-const wheelOptions = passiveSupported ? { passive: false } : false;
-
-window.addEventListener('wheel', handleSlideScroll, wheelOptions);
+let lastTouchY = 0;
+window.addEventListener('touchstart', function (event) {
+    lastTouchY = event.touches[0].clientY;
+}, { passive: true });
+window.addEventListener('touchmove', handleTouchScroll, { passive: false });
 
 
 function isHeroSectionInView() {
