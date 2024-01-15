@@ -1,0 +1,67 @@
+
+
+header {
+    /* position: relative; */
+    background: #00062C !important;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.nav-web-name {
+    color: white;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 180%;
+}
+
+.navbar-right-container ul li a {
+    color: white !important;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 100;
+    line-height: 180%;
+}
+
+.navbar-right-container ul li a:hover {
+    color: #01D2A6 !important;
+}
+
+.navbar-right-button {
+    border-radius: 16px;
+    border: 1px solid #00DE8E;
+    background: rgba(255, 255, 255, 0.05);
+    background-image: linear-gradient(223deg, #00DE8E -49.38%, #00A7FF 110%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 700;
+}
+
+.navbar-toggler-icon-custom {
+    color: white;
+}
+
+.navbar-toggler,
+.navbar-toggler:focus,
+.navbar-toggler:active {
+    outline: none !important;
+    border: none !important;
+    border-radius: 0%;
+    box-shadow: none;
+}
+
+.navbar-toggler-icon {
+    background-image: none !important;
+}
+
+@media screen and (max-width: 990px) {
+    .navbar-right-button {
+        margin-top: 8px;
+        margin-left: -6px;
+        padding: 9px;
+        font-size: 14px;
+    }
+}
