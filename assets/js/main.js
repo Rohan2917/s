@@ -149,12 +149,14 @@ function scrollToNextSection() {
         sectionToScroll.scrollIntoView({behavior: 'smooth'});
     }
 }
-window.addEventListener('wheel', handleSlideScroll, { passive: false });
+// window.addEventListener('wheel', handleSlideScroll, { passive: false });
 const mediaQuery=window.matchMedia('(max-width: 768px)');
 const handleMediaQueryChange=(event) => event.matches;
 mediaQuery.addListener(handleMediaQueryChange);
 if(handleMediaQueryChange(mediaQuery)) {
     document.body.style.overflowY='scroll';
+}else{
+    window.addEventListener('wheel', handleSlideScroll, { passive: false });
 }
 
 function isHeroSectionInView() {
