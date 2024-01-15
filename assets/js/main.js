@@ -160,13 +160,13 @@ function handleTouchScroll(event) {
             if (deltaY < 0 && currentSlide > 0) {
                 // Scrolling up
                 prevSlide = currentSlide;
-                currentSlide--;
+                currentSlide++;
                 scrollToSlide();
                 preventDefaultAndResetScrolling(event);
             } else if (deltaY > 0 && currentSlide < slides.length - 1) {
                 // Scrolling down
                 prevSlide = currentSlide;
-                currentSlide++;
+                currentSlide--;
                 scrollToSlide();
                 preventDefaultAndResetScrolling(event);
             } else if (deltaY > 0 && currentSlide === slides.length - 1) {
