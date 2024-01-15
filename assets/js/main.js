@@ -22,27 +22,32 @@ let isCompleteHeroSectionInViewMode=true;
 let allowScrolling=true;
 let scrollTimeout;
 if(handleMediaQueryChange(mediaQuery)) {
+    
     let lastTouchY = 0;
+    const sensitivity = 10; // Adjust this value based on your needs
     const heroSection = document.getElementById('hero-section');
+    
     heroSection.addEventListener('touchmove', function (event) {
-        // Prevent the default behavior of scrolling
         event.preventDefault();
     
         const currentTouchY = event.touches[0].pageY;
+        const deltaY = currentTouchY - lastTouchY;
     
-        if (currentTouchY > lastTouchY) {
-            // Scrolling down
-            prevSlide = currentSlide;
-            currentSlide--;
-            scrollToSlide();
-        } else {
-            // Scrolling up
-            prevSlide = currentSlide;
-            currentSlide++;
-            scrollToSlide();
+        if (Math.abs(deltaY) > sensitivity) {
+            if (deltaY > 0) {
+                // Scrolling down
+                prevSlide = currentSlide;
+                currentSlide--;
+                scrollToSlide();
+            } else {
+                // Scrolling up
+                prevSlide = currentSlide;
+                currentSlide++;
+                scrollToSlide();
+            }
+    
+            lastTouchY = currentTouchY;
         }
-    
-        lastTouchY = currentTouchY;
     });
 
 } else {
