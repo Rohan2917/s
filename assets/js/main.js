@@ -47,6 +47,12 @@ if(handleMediaQueryChange(mediaQuery)) {
             }
     
             lastTouchY = currentTouchY;
+            if(currentSlide===slides.length()-1)
+            {
+                document.body.style.overflowY='scroll';
+            }else{
+                document.body.style.overflowY='hidden';
+            }
         }
     });
 
