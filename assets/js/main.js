@@ -149,9 +149,23 @@ function scrollToNextSection() {
         sectionToScroll.scrollIntoView({behavior: 'smooth'});
     }
 }
+let passiveSupported = false;
 
-window.addEventListener('wheel',handleSlideScroll,{passive: false});
-window.addEventListener('scroll',handleSlideScroll,{passive: false});
+try {
+  const options = Object.defineProperty({}, 'passive', {
+    get: function() {
+      passiveSupported = true;
+    }
+  });
+
+  window.addEventListener('test', null, options);
+} catch (err) {
+  // Passive events not supported
+}
+
+const wheelOptions = passiveSupported ? { passive: false } : false;
+
+window.addEventListener('wheel', handleSlideScroll, wheelOptions);
 
 
 function isHeroSectionInView() {
