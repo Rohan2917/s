@@ -2,6 +2,7 @@ window.onload=function() {
     window.scrollTo(0,0);
 
 }
+
 document.addEventListener("DOMContentLoaded",function() {
     const navbarToggler=document.getElementById("navbarToggler");
     navbarToggler.addEventListener("click",function() {
@@ -10,14 +11,40 @@ document.addEventListener("DOMContentLoaded",function() {
         icon.classList.toggle("fa-times");
     });
 });
-
+const mediaQuery=window.matchMedia('(max-width: 990px)');
+const handleMediaQueryChange=(event) => event.matches;
+mediaQuery.addListener(handleMediaQueryChange);
 const slidesContainer=document.querySelector('.hero-slides');
 const slides=document.querySelectorAll('.hero-slide');
-let currentSlide=0; 
+let currentSlide=0;
 let prevSlide=0;
 let isCompleteHeroSectionInViewMode=true;
 let allowScrolling=true;
 let scrollTimeout;
+if(handleMediaQueryChange(mediaQuery)) {
+    let lastScrollPosition=window.pageYOffset;
+    const heroSection=document.getElementById('hero-section');
+    heroSection.addEventListener('scroll',function() {
+        const currentScrollPosition=window.pageYOffset;
+
+        if(currentScrollPosition>lastScrollPosition) {
+            prevSlide=currentSlide;
+            currentSlide--;
+            scrollToSlide();
+        } else {
+            prevSlide=currentSlide;
+            currentSlide++;
+            scrollToSlide();
+        }
+
+        lastScrollPosition=currentScrollPosition;
+    });
+
+} else {
+    window.addEventListener('wheel',handleSlideScroll,{passive: false});
+}
+
+
 
 function scrollToSlide() {
     const heroSection=document.getElementById('hero-section');
@@ -32,27 +59,26 @@ function scrollToSlide() {
 
 function updateActiveDot() {
     const dots=document.querySelectorAll('.dot');
-    if(prevSlide!=currentSlide)
-    {
-       dots.forEach((dot,index) => {
-        if(index===prevSlide ) {
-            
-            // dot.classList.add('prev-dot-progress');
-            dot.classList.add('move-animation');
-            // Remove the move-animation class after the animation completes
-            setTimeout(() => {
-                dot.classList.remove('move-animation');
-                // dot.classList.remove('prev-dot-progress');
-            },1000);
-        }
+    if(prevSlide!=currentSlide) {
+        dots.forEach((dot,index) => {
+            if(index===prevSlide) {
 
-    });   
+                // dot.classList.add('prev-dot-progress');
+                dot.classList.add('move-animation');
+                // Remove the move-animation class after the animation completes
+                setTimeout(() => {
+                    dot.classList.remove('move-animation');
+                    // dot.classList.remove('prev-dot-progress');
+                },1000);
+            }
+
+        });
     }
-  
+
 
     dots.forEach((dot,index) => {
         if(index===currentSlide) {
-         
+
             // dot.classList.add('move-animation');
             dot.classList.add('prev-dot-progress');
             // Remove the move-animation class after the animation completes
@@ -60,10 +86,10 @@ function updateActiveDot() {
                 dot.classList.remove('prev-dot-progress');
                 dot.classList.add('active');
                 // dot.classList.remove('move-animation');
-              
+
             },1000);
         } else {
-            
+
             dot.classList.remove('active');
         }
     });
@@ -149,17 +175,6 @@ function scrollToNextSection() {
         sectionToScroll.scrollIntoView({behavior: 'smooth'});
     }
 }
-window.addEventListener('wheel', handleSlideScroll, { passive: false });
-// const mediaQuery=window.matchMedia('(max-width: 768px)');
-// const handleMediaQueryChange=(event) => event.matches;
-// mediaQuery.addListener(handleMediaQueryChange);
-// if(handleMediaQueryChange(mediaQuery)) {
-//     document.body.style.overflowY='scroll';
-
-
-// }else{
-//     window.addEventListener('wheel', handleSlideScroll, { passive: false });
-// }
 
 function isHeroSectionInView() {
     const heroSection=document.getElementById('hero-section');
@@ -174,6 +189,8 @@ function isHeroSectionInView() {
         document.body.style.overflowY='scroll';
     }
 }
+
+
 
 
 function initializeHoverEffects(containerId) {
