@@ -22,22 +22,27 @@ let isCompleteHeroSectionInViewMode=true;
 let allowScrolling=true;
 let scrollTimeout;
 if(handleMediaQueryChange(mediaQuery)) {
-    let lastScrollPosition=window.pageYOffset;
-    const heroSection=document.getElementById('hero-section');
-    heroSection.addEventListener('scroll',function() {
-        const currentScrollPosition=window.pageYOffset;
-
-        if(currentScrollPosition>lastScrollPosition) {
-            prevSlide=currentSlide;
+    let lastTouchY = 0;
+    const heroSection = document.getElementById('hero-section');
+    heroSection.addEventListener('touchmove', function (event) {
+        // Prevent the default behavior of scrolling
+        event.preventDefault();
+    
+        const currentTouchY = event.touches[0].pageY;
+    
+        if (currentTouchY > lastTouchY) {
+            // Scrolling down
+            prevSlide = currentSlide;
             currentSlide--;
             scrollToSlide();
         } else {
-            prevSlide=currentSlide;
+            // Scrolling up
+            prevSlide = currentSlide;
             currentSlide++;
             scrollToSlide();
         }
-
-        lastScrollPosition=currentScrollPosition;
+    
+        lastTouchY = currentTouchY;
     });
 
 } else {
