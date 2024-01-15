@@ -641,11 +641,11 @@ main {
 
 }
 @media screen and (max-width:990px) {
-    #hero-section {
+    /* #hero-section {
      
-        /* overflow: scroll; */
+        overflow: scroll;
     
-    }
+    } */
     .hero-slide {
         flex-direction: column-reverse;
     }

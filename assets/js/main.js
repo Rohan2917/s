@@ -149,19 +149,14 @@ function scrollToNextSection() {
         sectionToScroll.scrollIntoView({behavior: 'smooth'});
     }
 }
-
-window.addEventListener('wheel',handleSlideScroll,{passive: false});
-
-window.addEventListener('wheel', handleWindowScroll, { passive: false });
-
-var x=0;
-function handleWindowScroll(e)
-{
-    e.preventDefault();
-    x+=1;
-    console.log("roll== ",x);
-    window.prompt("Scroll count:", x);
+window.addEventListener('wheel', handleSlideScroll, { passive: false });
+const mediaQuery=window.matchMedia('(max-width: 768px)');
+const handleMediaQueryChange=(event) => event.matches;
+mediaQuery.addListener(handleMediaQueryChange);
+if(handleMediaQueryChange(mediaQuery)) {
+    document.body.style.overflowY='scroll';
 }
+
 function isHeroSectionInView() {
     const heroSection=document.getElementById('hero-section');
     const heroRect=heroSection.getBoundingClientRect();
