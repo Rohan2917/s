@@ -2,7 +2,6 @@ window.onload=function() {
     window.scrollTo(0,0);
 
 }
-
 document.addEventListener("DOMContentLoaded",function() {
     const navbarToggler=document.getElementById("navbarToggler");
     navbarToggler.addEventListener("click",function() {
@@ -11,58 +10,14 @@ document.addEventListener("DOMContentLoaded",function() {
         icon.classList.toggle("fa-times");
     });
 });
-const mediaQuery=window.matchMedia('(max-width: 990px)');
-const handleMediaQueryChange=(event) => event.matches;
-mediaQuery.addListener(handleMediaQueryChange);
+
 const slidesContainer=document.querySelector('.hero-slides');
 const slides=document.querySelectorAll('.hero-slide');
-let currentSlide=0;
+let currentSlide=0; 
 let prevSlide=0;
 let isCompleteHeroSectionInViewMode=true;
 let allowScrolling=true;
 let scrollTimeout;
-if(handleMediaQueryChange(mediaQuery)) {
-    
-    let lastTouchY = 0;
-    const sensitivity = 10; // Adjust this value based on your needs
-    const heroSection = document.getElementById('hero-section');
-    
-    heroSection.addEventListener('touchmove', function (event) {
-        event.preventDefault();
-    
-        const currentTouchY = event.touches[0].pageY;
-        const deltaY = currentTouchY - lastTouchY;
-    
-        if (Math.abs(deltaY) > sensitivity) {
-            if (deltaY > 0) {
-                // Scrolling down
-                prevSlide = currentSlide;
-                currentSlide--;
-                scrollToSlide();
-                preventDefaultAndResetScrolling(event);
-            } else {
-                // Scrolling up
-                prevSlide = currentSlide;
-                currentSlide++;
-                scrollToSlide();
-                preventDefaultAndResetScrolling(event);
-            }
-    
-            lastTouchY = currentTouchY;
-            isHeroSectionInView();
-            if(currentSlide===slides.length-1) {
-                // Scrolling down from the last slide
-                scrollToNextSection();
-                preventDefaultAndResetScrolling(event);
-            }
-        }
-    });
-
-} else {
-    window.addEventListener('wheel',handleSlideScroll,{passive: false});
-}
-
-
 
 function scrollToSlide() {
     const heroSection=document.getElementById('hero-section');
@@ -77,26 +32,27 @@ function scrollToSlide() {
 
 function updateActiveDot() {
     const dots=document.querySelectorAll('.dot');
-    if(prevSlide!=currentSlide) {
-        dots.forEach((dot,index) => {
-            if(index===prevSlide) {
+    if(prevSlide!=currentSlide)
+    {
+       dots.forEach((dot,index) => {
+        if(index===prevSlide ) {
+            
+            // dot.classList.add('prev-dot-progress');
+            dot.classList.add('move-animation');
+            // Remove the move-animation class after the animation completes
+            setTimeout(() => {
+                dot.classList.remove('move-animation');
+                // dot.classList.remove('prev-dot-progress');
+            },1000);
+        }
 
-                // dot.classList.add('prev-dot-progress');
-                dot.classList.add('move-animation');
-                // Remove the move-animation class after the animation completes
-                setTimeout(() => {
-                    dot.classList.remove('move-animation');
-                    // dot.classList.remove('prev-dot-progress');
-                },1000);
-            }
-
-        });
+    });   
     }
-
+  
 
     dots.forEach((dot,index) => {
         if(index===currentSlide) {
-
+         
             // dot.classList.add('move-animation');
             dot.classList.add('prev-dot-progress');
             // Remove the move-animation class after the animation completes
@@ -104,10 +60,10 @@ function updateActiveDot() {
                 dot.classList.remove('prev-dot-progress');
                 dot.classList.add('active');
                 // dot.classList.remove('move-animation');
-
+              
             },1000);
         } else {
-
+            
             dot.classList.remove('active');
         }
     });
@@ -144,33 +100,77 @@ dots.forEach((dot,index) => {
     });
 });
 
+
 function handleSlideScroll(event) {
 
+    window.addEventListener("touchstart", touchStart)
+    window.addEventListener("touchmove", touchMove)
+    window.addEventListener("touchend", touchEnd)
+    let start = window.innerHeight
+    let end = 0
+
+    function touchStart(e) {
+        start = e.changedTouches[0].clientY;
+        //console.log(start, "start");
+        // console.log(start, "start");
+    }
+
+    function touchMove(e) {
+        end = e.changedTouches[0].clientY;
+    }
+
+    function touchEnd(e) {
+        //console.log(start, "start");
+        //console.log(end, "end");
+        //console.log(start - end - 555, "delta");
+        //console.log("END");
+        return start-end
+    }
+
+   
     isHeroSectionInView();
     const heroSection=document.getElementById('hero-section');
     const heroRect=heroSection.getBoundingClientRect();
     if(heroRect.top===65) {
 
-
-
-
         if(allowScrolling&&isCompleteHeroSectionInViewMode) {
-            if(event.deltaY<0&&currentSlide>0) {
-                // Scrolling up
-                prevSlide=currentSlide;
-                currentSlide--;
-                scrollToSlide();
-                preventDefaultAndResetScrolling(event);
-            } else if(event.deltaY>0&&currentSlide<slides.length-1) {
-                // Scrolling down
-                prevSlide=currentSlide;
-                currentSlide++;
-                scrollToSlide();
-                preventDefaultAndResetScrolling(event);
-            } else if(event.deltaY>0&&currentSlide===slides.length-1) {
-                // Scrolling down from the last slide
-                scrollToNextSection();
-                preventDefaultAndResetScrolling(event);
+            if(event.type === 'wheel'){
+                if(event.deltaY<0&&currentSlide>0) {
+                    // Scrolling up
+                    prevSlide=currentSlide;
+                    currentSlide--;
+                    scrollToSlide();
+                    preventDefaultAndResetScrolling(event);
+                } else if(event.deltaY>0&&currentSlide<slides.length-1) {
+                    // Scrolling down
+                    prevSlide=currentSlide;
+                    currentSlide++;
+                    scrollToSlide();
+                    preventDefaultAndResetScrolling(event);
+                } else if(event.deltaY>0&&currentSlide===slides.length-1) {
+                    // Scrolling down from the last slide
+                    scrollToNextSection();
+                    preventDefaultAndResetScrolling(event);
+                }
+            } else {
+                // replaced deltaY with the function y value
+                if(touchEnd(event)<0&&currentSlide>0) {
+                    // Scrolling up
+                    prevSlide=currentSlide;
+                    currentSlide--;
+                    scrollToSlide();
+                    preventDefaultAndResetScrolling(event);
+                } else if(touchEnd(event)>0&&currentSlide<slides.length-1) {
+                    // Scrolling down
+                    prevSlide=currentSlide;
+                    currentSlide++;
+                    scrollToSlide();
+                    preventDefaultAndResetScrolling(event);
+                } else if(touchEnd(event)>0&&currentSlide===slides.length-1) {
+                    // Scrolling down from the last slide
+                    scrollToNextSection();
+                    preventDefaultAndResetScrolling(event);
+                }
             }
         }
     }
@@ -194,11 +194,17 @@ function scrollToNextSection() {
     }
 }
 
+window.addEventListener('wheel',handleSlideScroll,{passive: false});
+window.addEventListener('scroll', handleSlideScroll, { passive: false });
+window.addEventListener('touchmove', handleSlideScroll, { passive: false });
+
+
+
 function isHeroSectionInView() {
     const heroSection=document.getElementById('hero-section');
     const heroRect=heroSection.getBoundingClientRect();
-    console.log(heroRect.top)
-    console.log("body-scroll= ",document.body.style.overflowY)
+    //console.log(heroRect.top)
+    //console.log("body-scroll= ",document.body.style.overflowY)
     if(heroRect.top===65) {
 
         document.body.style.overflowY='hidden';
@@ -207,8 +213,6 @@ function isHeroSectionInView() {
         document.body.style.overflowY='scroll';
     }
 }
-
-
 
 
 function initializeHoverEffects(containerId) {
